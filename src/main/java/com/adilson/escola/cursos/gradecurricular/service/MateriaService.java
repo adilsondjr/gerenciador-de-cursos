@@ -1,8 +1,10 @@
 package com.adilson.escola.cursos.gradecurricular.service;
 
 import com.adilson.escola.cursos.gradecurricular.entity.MateriaEntity;
+import com.adilson.escola.cursos.gradecurricular.exception.MateriaException;
 import com.adilson.escola.cursos.gradecurricular.repository.IMateriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,9 +29,12 @@ public class MateriaService implements IMateriaService{
             if (materiaEntityFounded.isPresent()) {
                 return materiaEntityFounded.get();
             }
-            return null;
+
+            throw new MateriaException("Materia not found!", HttpStatus.NOT_FOUND);
+        } catch (MateriaException ex) {
+            throw ex;
         } catch (Exception ex) {
-            return null;
+            throw new MateriaException("Internal Server Error, please, contact the support!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -63,19 +68,25 @@ public class MateriaService implements IMateriaService{
 
                 return true;
             }
-            return false;
-        } catch (Exception e) {
-            return false;
+
+            throw new MateriaException("Materia not found!", HttpStatus.NOT_FOUND);
+        } catch (MateriaException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new MateriaException("Internal Server Error, please, contact the support!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public boolean delete(Long id) {
         try{
+            this.getById(id);
             materiaRepository.deleteById(id);
             return true;
-        } catch (Error e) {
-            return false;
+        } catch (MateriaException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw ex;
         }
     }
 

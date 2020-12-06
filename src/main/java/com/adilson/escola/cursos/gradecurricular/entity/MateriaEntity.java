@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class MateriaEntity implements Serializable {
 
-    private static final long serialVersionUID = 5115709874529054925L;
+    private static final long serialVersionUID = -2051509500677088101L;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Id

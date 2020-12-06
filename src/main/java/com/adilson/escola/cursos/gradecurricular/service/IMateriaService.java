@@ -1,7 +1,6 @@
 package com.adilson.escola.cursos.gradecurricular.service;
 
 import com.adilson.escola.cursos.gradecurricular.entity.MateriaEntity;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
