@@ -1,5 +1,6 @@
 package com.adilson.escola.cursos.gradecurricular.controller;
 
+import com.adilson.escola.cursos.gradecurricular.dto.MateriaDto;
 import com.adilson.escola.cursos.gradecurricular.entity.MateriaEntity;
 import com.adilson.escola.cursos.gradecurricular.repository.IMateriaRepository;
 import com.adilson.escola.cursos.gradecurricular.service.IMateriaService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,7 +27,7 @@ public class MateriaController {
     private IMateriaService materiaService;
 
     @GetMapping
-    public ResponseEntity<List<MateriaEntity>> getMaterias() {
+    public ResponseEntity<List<MateriaDto>> getMaterias() {
 
         log.info("Starting GET materia ...");
 
@@ -34,7 +36,7 @@ public class MateriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MateriaEntity> getMateriasById(@PathVariable Long id) {
+    public ResponseEntity<MateriaDto> getMateriasById(@PathVariable Long id) {
 
         log.info("Starting GET materia by Id ...");
 
@@ -43,20 +45,20 @@ public class MateriaController {
     }
 
     @PostMapping
-    public ResponseEntity<Boolean> createMateria(@RequestBody MateriaEntity materiaEntity) {
+    public ResponseEntity<Boolean> createMateria(@Valid @RequestBody MateriaDto materiaDto) {
 
         log.info("Starting Create materia ...");
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(materiaService.create(materiaEntity));
+        return ResponseEntity.status(HttpStatus.CREATED).body(materiaService.create(materiaDto));
 
     }
 
     @PutMapping
-    public ResponseEntity<Boolean> updateMateria(@RequestBody MateriaEntity materiaEntity) {
+    public ResponseEntity<Boolean> updateMateria(@Valid @RequestBody MateriaDto materiaDto) {
 
         log.info("Starting UPDATE materia ...");
 
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.update(materiaEntity));
+        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.update(materiaDto));
 
     }
 
