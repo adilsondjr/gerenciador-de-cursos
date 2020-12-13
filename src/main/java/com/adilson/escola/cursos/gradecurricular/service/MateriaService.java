@@ -7,12 +7,17 @@ import com.adilson.escola.cursos.gradecurricular.repository.IMateriaRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@CacheConfig(cacheNames = "materia")
 @Service
 public class MateriaService implements IMateriaService{
 
@@ -28,11 +33,13 @@ public class MateriaService implements IMateriaService{
 		this.materiaRepository = materiaRepository;
 	}
 
+    @CachePut(unless = "#result.size()<3")
     @Override
     public List<MateriaDto> getAll() {
         return this.modelMapper.map(this.materiaRepository.findAll(),new TypeToken<List<MateriaDto>>() {}.getType());
     }
 
+    @CachePut(key = "#id")
     @Override
     public MateriaDto getById(Long id) {
         try {
@@ -65,19 +72,12 @@ public class MateriaService implements IMateriaService{
     @Override
     public Boolean update(MateriaDto materiaDto) {
         try {
+    		this.getById(materiaDto.getId());
+            MateriaEntity newMateriaEntity = this.modelMapper.map(materiaDto, MateriaEntity.class);
 
-            Optional<MateriaEntity> materiaEntityFounded = this.materiaRepository.findById(materiaDto.getId());
+            this.materiaRepository.save(newMateriaEntity);
 
-            if(materiaEntityFounded.isPresent()) {
-
-                MateriaEntity newMateriaEntity = this.modelMapper.map(materiaDto, MateriaEntity.class);
-
-                this.materiaRepository.save(newMateriaEntity);
-
-                return true;
-            }
-
-            throw new MateriaException(MATERIA_NOT_FOUND, HttpStatus.NOT_FOUND);
+            return Boolean.TRUE;
         } catch (MateriaException ex) {
             throw ex;
         } catch (Exception ex) {
