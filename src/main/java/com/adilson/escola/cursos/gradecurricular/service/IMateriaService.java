@@ -1,7 +1,6 @@
 package com.adilson.escola.cursos.gradecurricular.service;
 
 import com.adilson.escola.cursos.gradecurricular.dto.MateriaDto;
-import com.adilson.escola.cursos.gradecurricular.entity.MateriaEntity;
 
 import java.util.List;
 

@@ -16,6 +16,9 @@ import java.util.Optional;
 @Service
 public class MateriaService implements IMateriaService{
 
+	private static final String MATERIA_NOT_FOUND = "Materia not found!";
+	private static final String INTERNAL_ERROR = "Internal Server Error, please, contact the support!";
+	
     @Autowired
     private IMateriaRepository materiaRepository;
     private ModelMapper modelMapper;
@@ -39,11 +42,11 @@ public class MateriaService implements IMateriaService{
                 return this.modelMapper.map(materiaEntityFounded.get(), MateriaDto.class);
             }
 
-            throw new MateriaException("Materia not found!", HttpStatus.NOT_FOUND);
+            throw new MateriaException(MATERIA_NOT_FOUND, HttpStatus.NOT_FOUND);
         } catch (MateriaException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new MateriaException("Internal Server Error, please, contact the support!", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new MateriaException(INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -53,9 +56,9 @@ public class MateriaService implements IMateriaService{
         try {
             MateriaEntity materiaEntity = this.modelMapper.map(materiaDto, MateriaEntity.class);
             this.materiaRepository.save(materiaEntity);
-            return true;
+            return Boolean.TRUE;
         }catch (Exception e) {
-            return false;
+        	throw new MateriaException(INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -74,11 +77,11 @@ public class MateriaService implements IMateriaService{
                 return true;
             }
 
-            throw new MateriaException("Materia not found!", HttpStatus.NOT_FOUND);
+            throw new MateriaException(MATERIA_NOT_FOUND, HttpStatus.NOT_FOUND);
         } catch (MateriaException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new MateriaException("Internal Server Error, please, contact the support!", HttpStatus.INTERNAL_SERVER_ERROR);
+        	throw new MateriaException(INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -87,7 +90,7 @@ public class MateriaService implements IMateriaService{
         try{
             this.getById(id);
             materiaRepository.deleteById(id);
-            return true;
+            return Boolean.TRUE;
         } catch (MateriaException ex) {
             throw ex;
         } catch (Exception ex) {
