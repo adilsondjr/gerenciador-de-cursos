@@ -18,21 +18,25 @@ public class MateriaService implements IMateriaService{
 
     @Autowired
     private IMateriaRepository materiaRepository;
+    private ModelMapper modelMapper;
+    
+    public MateriaService(IMateriaRepository materiaRepository) {
+		this.modelMapper = new ModelMapper();
+		this.materiaRepository = materiaRepository;
+	}
 
     @Override
     public List<MateriaDto> getAll() {
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(this.materiaRepository.findAll(),new TypeToken<List<MateriaDto>>() {}.getType());
+        return this.modelMapper.map(this.materiaRepository.findAll(),new TypeToken<List<MateriaDto>>() {}.getType());
     }
 
     @Override
     public MateriaDto getById(Long id) {
         try {
-            ModelMapper mapper = new ModelMapper();
             Optional<MateriaEntity> materiaEntityFounded = this.materiaRepository.findById(id);
 
             if (materiaEntityFounded.isPresent()) {
-                return mapper.map(materiaEntityFounded.get(), MateriaDto.class);
+                return this.modelMapper.map(materiaEntityFounded.get(), MateriaDto.class);
             }
 
             throw new MateriaException("Materia not found!", HttpStatus.NOT_FOUND);
@@ -47,8 +51,7 @@ public class MateriaService implements IMateriaService{
     @Override
     public Boolean create(MateriaDto materiaDto) {
         try {
-            ModelMapper mapper = new ModelMapper();
-            MateriaEntity materiaEntity = mapper.map(materiaDto, MateriaEntity.class);
+            MateriaEntity materiaEntity = this.modelMapper.map(materiaDto, MateriaEntity.class);
             this.materiaRepository.save(materiaEntity);
             return true;
         }catch (Exception e) {
@@ -63,9 +66,8 @@ public class MateriaService implements IMateriaService{
             Optional<MateriaEntity> materiaEntityFounded = this.materiaRepository.findById(materiaDto.getId());
 
             if(materiaEntityFounded.isPresent()) {
-                ModelMapper mapper = new ModelMapper();
 
-                MateriaEntity newMateriaEntity = mapper.map(materiaDto, MateriaEntity.class);
+                MateriaEntity newMateriaEntity = this.modelMapper.map(materiaDto, MateriaEntity.class);
 
                 this.materiaRepository.save(newMateriaEntity);
 
