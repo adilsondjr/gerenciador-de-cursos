@@ -2,11 +2,13 @@ package com.adilson.escola.cursos.gradecurricular.controller;
 
 import com.adilson.escola.cursos.gradecurricular.dto.MateriaDto;
 import com.adilson.escola.cursos.gradecurricular.entity.MateriaEntity;
+import com.adilson.escola.cursos.gradecurricular.model.Response;
 import com.adilson.escola.cursos.gradecurricular.repository.IMateriaRepository;
 import com.adilson.escola.cursos.gradecurricular.service.IMateriaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,57 +20,77 @@ import java.util.List;
 @RequestMapping("materia")
 public class MateriaController {
 
-    Logger log = LoggerFactory.getLogger(MateriaController.class);
+	Logger log = LoggerFactory.getLogger(MateriaController.class);
 
-    @Autowired
-    private IMateriaRepository materiaRepository;
+	private static final String DELETE = "DELETE";
+	private static final String UPDATE = "UPDATE";
+	
+	@Autowired
+	private IMateriaRepository materiaRepository;
 
-    @Autowired
-    private IMateriaService materiaService;
+	@Autowired
+	private IMateriaService materiaService;
 
-    @GetMapping
-    public ResponseEntity<List<MateriaDto>> getMaterias() {
+	@GetMapping
+	public ResponseEntity<Response<List<MateriaDto>>> getMaterias() {
 
-        log.info("Starting GET materia ...");
+		log.info("Starting GET materia ...");
+		
+		Response<List<MateriaDto>> response = new Response<>();
+		response.setData(materiaService.getAll());
+		response.setStatusCode(HttpStatus.OK.value());
+		
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).getMaterias())
+				.withSelfRel());
 
-        return ResponseEntity.status(HttpStatus.OK).body(materiaService.getAll());
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 
-    }
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MateriaDto> getMateriasById(@PathVariable Long id) {
+	@GetMapping("/{id}")
+	public ResponseEntity<Response<MateriaDto>> getMateriasById(@PathVariable Long id) {
 
-        log.info("Starting GET materia by Id ...");
+		log.info("Starting GET materia by Id ...");
 
-        return ResponseEntity.status(HttpStatus.OK).body(materiaService.getById(id));
+		Response<MateriaDto> response = new Response<>();
+		response.setData(materiaService.getById(id));
+		response.setStatusCode(HttpStatus.OK.value());
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).getMateriasById(id))
+				.withSelfRel());
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).delete(id))
+				.withRel(DELETE));
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).updateMateria(materiaService.getById(id)))
+				.withRel(UPDATE));
 
-    }
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 
-    @PostMapping
-    public ResponseEntity<Boolean> createMateria(@Valid @RequestBody MateriaDto materiaDto) {
+	}
 
-        log.info("Starting Create materia ...");
+	@PostMapping
+	public ResponseEntity<Boolean> createMateria(@Valid @RequestBody MateriaDto materiaDto) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(materiaService.create(materiaDto));
+		log.info("Starting Create materia ...");
 
-    }
+		return ResponseEntity.status(HttpStatus.CREATED).body(materiaService.create(materiaDto));
 
-    @PutMapping
-    public ResponseEntity<Boolean> updateMateria(@Valid @RequestBody MateriaDto materiaDto) {
+	}
 
-        log.info("Starting UPDATE materia ...");
+	@PutMapping
+	public ResponseEntity<Boolean> updateMateria(@Valid @RequestBody MateriaDto materiaDto) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.update(materiaDto));
+		log.info("Starting UPDATE materia ...");
 
-    }
+		return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.update(materiaDto));
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
+	}
 
-        log.info("Starting DELETE materia ...");
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(this.materiaService.delete(id));
+		log.info("Starting DELETE materia ...");
 
-    }
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(this.materiaService.delete(id));
+
+	}
 
 }

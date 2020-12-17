@@ -1,15 +1,19 @@
 package com.adilson.escola.cursos.gradecurricular.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.hateoas.RepresentationModel;
+
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class MateriaDto {
+public class MateriaDto  extends RepresentationModel<MateriaDto>{
 
     private Long id;
 
