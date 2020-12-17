@@ -7,9 +7,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Response<T> extends RepresentationModel<Response<T>>{
+public class Response<T> extends RepresentationModel<Response<T>> {
 
 	private int statusCode;
 	private T data;
-	
+
 }

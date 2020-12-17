@@ -17,5 +17,5 @@ public class GradeCurricularApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(GradeCurricularApplication.class, args);
 	}
-
+	
 }

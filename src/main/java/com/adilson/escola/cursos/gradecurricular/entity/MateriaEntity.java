@@ -14,27 +14,27 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class MateriaEntity implements Serializable {
 
-    private static final long serialVersionUID = -2051509500677088101L;
+	private static final long serialVersionUID = -2051509500677088101L;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name = "increment", strategy = "increment")
-    @Column(name = "id")
-    private Long id;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Id
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
+	@Column(name = "id")
+	private Long id;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @Column(name = "nome")
-    private String nome;
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@Column(name = "nome")
+	private String nome;
 
-    @Column(name = "cargaHoraria")
-    private int cargaHoraria;
+	@Column(name = "cargaHoraria")
+	private int cargaHoraria;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @Column(name = "codigo")
-    private String codigo;
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@Column(name = "codigo")
+	private String codigo;
 
-    @Column(name = "frequencia")
-    private int frequencia;
+	@Column(name = "frequencia")
+	private int frequencia;
 
 }

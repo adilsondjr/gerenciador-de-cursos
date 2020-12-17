@@ -9,8 +9,8 @@ import java.util.Map;
 @Getter
 public class ErrorMapResponse {
 
-    private int httpStatus;
-    private Map<String, String> errors;
-    private Long timeStamp;
+	private int httpStatus;
+	private Map<String, String> errors;
+	private Long timeStamp;
 
 }

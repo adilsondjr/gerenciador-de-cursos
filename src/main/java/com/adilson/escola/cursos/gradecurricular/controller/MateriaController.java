@@ -1,9 +1,7 @@
 package com.adilson.escola.cursos.gradecurricular.controller;
 
 import com.adilson.escola.cursos.gradecurricular.dto.MateriaDto;
-import com.adilson.escola.cursos.gradecurricular.entity.MateriaEntity;
 import com.adilson.escola.cursos.gradecurricular.model.Response;
-import com.adilson.escola.cursos.gradecurricular.repository.IMateriaRepository;
 import com.adilson.escola.cursos.gradecurricular.service.IMateriaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +22,6 @@ public class MateriaController {
 
 	private static final String DELETE = "DELETE";
 	private static final String UPDATE = "UPDATE";
-	
-	@Autowired
-	private IMateriaRepository materiaRepository;
 
 	@Autowired
 	private IMateriaService materiaService;
@@ -35,11 +30,11 @@ public class MateriaController {
 	public ResponseEntity<Response<List<MateriaDto>>> getMaterias() {
 
 		log.info("Starting GET materia ...");
-		
+
 		Response<List<MateriaDto>> response = new Response<>();
 		response.setData(materiaService.getAll());
 		response.setStatusCode(HttpStatus.OK.value());
-		
+
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).getMaterias())
 				.withSelfRel());
 
@@ -59,7 +54,8 @@ public class MateriaController {
 				.withSelfRel());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).delete(id))
 				.withRel(DELETE));
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).updateMateria(materiaService.getById(id)))
+		response.add(WebMvcLinkBuilder
+				.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).updateMateria(materiaService.getById(id)))
 				.withRel(UPDATE));
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);

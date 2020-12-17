@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface IMateriaService {
 
-    public List<MateriaDto> getAll();
+	public List<MateriaDto> getAll();
 
-    public MateriaDto getById(Long id);
+	public MateriaDto getById(Long id);
 
-    public Boolean create(final MateriaDto materiaDto);
+	public Boolean create(final MateriaDto materiaDto);
 
-    public Boolean update(final MateriaDto materiaDto);
+	public Boolean update(final MateriaDto materiaDto);
 
-    public boolean delete(final Long id);
+	public boolean delete(final Long id);
 }

@@ -18,31 +18,31 @@ import java.util.Map;
 @ControllerAdvice
 public class ResourceHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMapResponse> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ErrorMapResponse> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+		Map<String, String> errors = new HashMap<>();
 
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String field = ((FieldError) error ).getField();
-            String message = error.getDefaultMessage();
-            errors.put(field, message);
-        });
+		ex.getBindingResult().getAllErrors().forEach(error -> {
+			String field = ((FieldError) error).getField();
+			String message = error.getDefaultMessage();
+			errors.put(field, message);
+		});
 
-        ErrorMapResponseBuilder errorMap = ErrorMapResponse.builder();
-        errorMap.errors(errors).httpStatus(HttpStatus.BAD_REQUEST.value()).timeStamp(System.currentTimeMillis());
+		ErrorMapResponseBuilder errorMap = ErrorMapResponse.builder();
+		errorMap.errors(errors).httpStatus(HttpStatus.BAD_REQUEST.value()).timeStamp(System.currentTimeMillis());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap.build());
-    }
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap.build());
+	}
 
-    @ExceptionHandler(MateriaException.class)
-    public ResponseEntity<ErrorResponse> handlerMateriaException(MateriaException ex) {
-        ErrorResponseBuilder erro = ErrorResponse.builder();
+	@ExceptionHandler(MateriaException.class)
+	public ResponseEntity<ErrorResponse> handlerMateriaException(MateriaException ex) {
+		ErrorResponseBuilder erro = ErrorResponse.builder();
 
-        erro.httpStatus(ex.getHttpStatus().value());
-        erro.message(ex.getMessage());
-        erro.timeStamp(System.currentTimeMillis());
+		erro.httpStatus(ex.getHttpStatus().value());
+		erro.message(ex.getMessage());
+		erro.timeStamp(System.currentTimeMillis());
 
-        return ResponseEntity.status(ex.getHttpStatus()).body(erro.build());
-    }
+		return ResponseEntity.status(ex.getHttpStatus()).body(erro.build());
+	}
 
 }
