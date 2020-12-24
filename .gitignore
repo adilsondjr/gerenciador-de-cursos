@@ -36,3 +36,6 @@ build/
 /mvnw
 /mvnw.cmd
 .mvn/
+
+### PROPERTIES BD ###
+application.properties
