@@ -9,6 +9,8 @@ public interface IMateriaService {
 	public List<MateriaDto> getAll();
 
 	public MateriaDto getById(Long id);
+	
+	public List<MateriaDto> getMateriasByHoraMinima(int horaMinima);
 
 	public Boolean create(final MateriaDto materiaDto);
 

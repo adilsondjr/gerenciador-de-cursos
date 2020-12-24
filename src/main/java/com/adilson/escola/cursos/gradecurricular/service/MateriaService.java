@@ -73,6 +73,25 @@ public class MateriaService implements IMateriaService {
 	}
 
 	@Override
+	public List<MateriaDto> getMateriasByHoraMinima(int horaMinima) {
+		try {
+			List<MateriaDto> materiaDto = this.modelMapper.map(this.materiaRepository.findByHoraMinima(horaMinima),
+					new TypeToken<List<MateriaDto>>() {
+					}.getType());
+			
+			materiaDto.forEach(materia -> {
+				materia.add(WebMvcLinkBuilder
+						.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).getMateriasById(materia.getId()))
+						.withSelfRel());
+			});
+
+			return materiaDto;
+		} catch (Exception e) {
+			throw new MateriaException(INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@Override
 	public Boolean create(MateriaDto materiaDto) {
 		try {
 			MateriaEntity materiaEntity = this.modelMapper.map(materiaDto, MateriaEntity.class);
@@ -111,5 +130,4 @@ public class MateriaService implements IMateriaService {
 			throw ex;
 		}
 	}
-
 }
