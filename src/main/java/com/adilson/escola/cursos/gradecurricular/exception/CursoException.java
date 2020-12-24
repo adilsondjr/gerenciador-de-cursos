@@ -8,9 +8,9 @@ import lombok.Getter;
 public class CursoException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private HttpStatus httpStatus;
-	
+
 	public CursoException(String message, HttpStatus httpStatus ) {
 		super(message);
 		this.httpStatus = httpStatus;

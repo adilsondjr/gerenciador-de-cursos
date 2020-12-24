@@ -16,4 +16,5 @@ public class Response<T> extends RepresentationModel<Response<T>> {
 	public Response() {
 		this.timeStamp = System.currentTimeMillis();
 	}
+
 }

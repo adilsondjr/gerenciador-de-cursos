@@ -14,4 +14,5 @@ public class MateriaException extends RuntimeException {
 		super(mensagem);
 		this.httpStatus = httpStatus;
 	}
+	
 }

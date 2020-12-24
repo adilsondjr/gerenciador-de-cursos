@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class CursoEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@Id
 	@GeneratedValue(generator = "increment")
@@ -45,4 +45,5 @@ public class CursoEntity implements Serializable{
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "materia_id")
 	private List<MateriaEntity> materias;
+	
 }

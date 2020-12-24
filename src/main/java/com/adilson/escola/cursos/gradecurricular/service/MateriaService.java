@@ -37,6 +37,7 @@ public class MateriaService implements IMateriaService {
 	@Override
 	public List<MateriaDto> getAll() {
 		try {
+
 			List<MateriaDto> materiaDto = this.modelMapper.map(this.materiaRepository.findAll(),
 					new TypeToken<List<MateriaDto>>() {
 					}.getType());
@@ -57,6 +58,7 @@ public class MateriaService implements IMateriaService {
 	@Override
 	public MateriaDto getById(Long id) {
 		try {
+
 			Optional<MateriaEntity> materiaEntityFounded = this.materiaRepository.findById(id);
 
 			if (materiaEntityFounded.isPresent()) {
@@ -86,6 +88,7 @@ public class MateriaService implements IMateriaService {
 			});
 
 			return materiaDto;
+
 		} catch (Exception e) {
 			throw new MateriaException(INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -94,9 +97,13 @@ public class MateriaService implements IMateriaService {
 	@Override
 	public Boolean create(MateriaDto materiaDto) {
 		try {
+
 			MateriaEntity materiaEntity = this.modelMapper.map(materiaDto, MateriaEntity.class);
+
 			this.materiaRepository.save(materiaEntity);
+
 			return Boolean.TRUE;
+
 		} catch (Exception e) {
 			throw new MateriaException(INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -105,12 +112,16 @@ public class MateriaService implements IMateriaService {
 	@Override
 	public Boolean update(MateriaDto materiaDto) {
 		try {
+			
 			this.getById(materiaDto.getId());
+			
 			MateriaEntity newMateriaEntity = this.modelMapper.map(materiaDto, MateriaEntity.class);
 
 			this.materiaRepository.save(newMateriaEntity);
 
 			return Boolean.TRUE;
+			
+			
 		} catch (MateriaException ex) {
 			throw ex;
 		} catch (Exception ex) {
@@ -121,13 +132,18 @@ public class MateriaService implements IMateriaService {
 	@Override
 	public boolean delete(Long id) {
 		try {
+
 			this.getById(id);
+
 			materiaRepository.deleteById(id);
+
 			return Boolean.TRUE;
+
 		} catch (MateriaException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			throw ex;
 		}
 	}
+
 }

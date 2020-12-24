@@ -30,14 +30,13 @@ public class MateriaController {
 		log.info("Starting GET materia ...");
 
 		Response<List<MateriaDto>> response = new Response<>();
+		
 		response.setData(materiaService.getAll());
 		response.setStatusCode(HttpStatus.OK.value());
-
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).getMaterias())
 				.withSelfRel());
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
-
 	}
 
 	@GetMapping("/{id}")
@@ -46,6 +45,7 @@ public class MateriaController {
 		log.info("Starting GET materia by Id ...");
 
 		Response<MateriaDto> response = new Response<>();
+
 		response.setData(materiaService.getById(id));
 		response.setStatusCode(HttpStatus.OK.value());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).getMateriasById(id))
@@ -57,7 +57,6 @@ public class MateriaController {
 				.withRel(HyperLinkConstants.UPDATE.getValor()));
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
-
 	}
 	
 	@GetMapping("/horaMinima/{horaMinima}")
@@ -66,13 +65,13 @@ public class MateriaController {
 		log.info("Starting GET materia by carga horaria ...");
 
 		Response <List<MateriaDto>> response = new Response<>();
+
 		response.setData(materiaService.getMateriasByHoraMinima(horaMinima));
 		response.setStatusCode(HttpStatus.OK.value());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).getMateriasByHoraMinima(horaMinima))
 				.withSelfRel());		
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
-
 	}
 
 	@PostMapping
@@ -81,7 +80,6 @@ public class MateriaController {
 		log.info("Starting Create materia ...");
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(materiaService.create(materiaDto));
-
 	}
 
 	@PutMapping
@@ -90,7 +88,6 @@ public class MateriaController {
 		log.info("Starting UPDATE materia ...");
 
 		return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.update(materiaDto));
-
 	}
 
 	@DeleteMapping("/{id}")
@@ -99,7 +96,6 @@ public class MateriaController {
 		log.info("Starting DELETE materia ...");
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(this.materiaService.delete(id));
-
 	}
-
+	
 }

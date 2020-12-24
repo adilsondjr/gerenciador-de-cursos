@@ -19,6 +19,7 @@ public class ResourceHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Response<Map<String, String>>> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+
 		Map<String, String> errors = new HashMap<>();
 
 		ex.getBindingResult().getAllErrors().forEach(error -> {
@@ -37,6 +38,7 @@ public class ResourceHandler {
 
 	@ExceptionHandler(MateriaException.class)
 	public ResponseEntity<Response<String>> handlerMateriaException(MateriaException ex) {
+
 		Response<String> response = new Response<>();
 
 		response.setStatusCode(ex.getHttpStatus().value());
@@ -47,11 +49,13 @@ public class ResourceHandler {
 	
 	@ExceptionHandler(CursoException.class)
 	public ResponseEntity<Response<String>> handlerCursoException(CursoException m){
+
 		Response<String> response = new Response<>();
-		
+
 		response.setStatusCode(m.getHttpStatus().value());
 		response.setData(m.getMessage());
-		
+
 		return ResponseEntity.status(m.getHttpStatus()).body(response);
 	}
+
 }
