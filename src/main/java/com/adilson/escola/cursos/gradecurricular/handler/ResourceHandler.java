@@ -1,5 +1,6 @@
 package com.adilson.escola.cursos.gradecurricular.handler;
 
+import com.adilson.escola.cursos.gradecurricular.exception.CursoException;
 import com.adilson.escola.cursos.gradecurricular.exception.MateriaException;
 import com.adilson.escola.cursos.gradecurricular.model.Response;
 
@@ -42,5 +43,15 @@ public class ResourceHandler {
 		response.setData(ex.getMessage());
 
 		return ResponseEntity.status(ex.getHttpStatus()).body(response);
+	}
+	
+	@ExceptionHandler(CursoException.class)
+	public ResponseEntity<Response<String>> handlerCursoException(CursoException m){
+		Response<String> response = new Response<>();
+		
+		response.setStatusCode(m.getHttpStatus().value());
+		response.setData(m.getMessage());
+		
+		return ResponseEntity.status(m.getHttpStatus()).body(response);
 	}
 }

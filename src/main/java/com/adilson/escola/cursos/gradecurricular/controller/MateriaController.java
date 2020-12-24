@@ -1,5 +1,6 @@
 package com.adilson.escola.cursos.gradecurricular.controller;
 
+import com.adilson.escola.cursos.gradecurricular.constants.HyperLinkConstants;
 import com.adilson.escola.cursos.gradecurricular.dto.MateriaDto;
 import com.adilson.escola.cursos.gradecurricular.model.Response;
 import com.adilson.escola.cursos.gradecurricular.service.IMateriaService;
@@ -19,9 +20,6 @@ import java.util.List;
 public class MateriaController {
 
 	Logger log = LoggerFactory.getLogger(MateriaController.class);
-
-	private static final String DELETE = "DELETE";
-	private static final String UPDATE = "UPDATE";
 
 	@Autowired
 	private IMateriaService materiaService;
@@ -53,10 +51,10 @@ public class MateriaController {
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).getMateriasById(id))
 				.withSelfRel());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).delete(id))
-				.withRel(DELETE));
+				.withRel(HyperLinkConstants.DELETE.getValor()));
 		response.add(WebMvcLinkBuilder
 				.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class).updateMateria(materiaService.getById(id)))
-				.withRel(UPDATE));
+				.withRel(HyperLinkConstants.UPDATE.getValor()));
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 
