@@ -22,7 +22,6 @@ import com.adilson.escola.cursos.gradecurricular.repository.IMateriaRepository;
 public class CursoService implements ICursoService {
 
 	private ICursoRepository cursoRepository;
-
 	private IMateriaRepository materiaRepository;
 
 	@Autowired
@@ -33,21 +32,21 @@ public class CursoService implements ICursoService {
 
 	@Override
 	public Boolean cadastrar(CursoModel cursoModel) {
+		
 		try {
 			/*
 			 * O id não pode ser informado no cadastro
 			 */
-
 			if (cursoModel.getId() != null) {
 				throw new CursoException(ErrorMessagesConstants.ERRO_ID_INFORMADO.getValor(), HttpStatus.BAD_REQUEST);
 			}
-			
 			/*
 			 * Não permite fazer cadastro de cursos com mesmos códigos.
 			 */
 			if (this.cursoRepository.findCursoByCodigo(cursoModel.getCodCurso()) != null) {
-				throw new CursoException(ErrorMessagesConstants.ERRO_CURSO_CADASTRADO_ANTERIORMENTE.getValor(), HttpStatus.BAD_REQUEST);
+				throw new CursoException(ErrorMessagesConstants.ERRO_CURSO_CADASTRADO_ANTERIORMENTE.getValor(), HttpStatus.BAD_REQUEST);		
 			}
+			
 			return this.cadastrarOuAtualizar(cursoModel);
 
 		}catch (CursoException c) {
@@ -61,8 +60,11 @@ public class CursoService implements ICursoService {
 	@Override
 	public Boolean atualizar(CursoModel cursoModel) {
 		try {
+
 			this.consultarPorCodigo(cursoModel.getCodCurso());
+
 			return this.cadastrarOuAtualizar(cursoModel);
+
 		} catch (CursoException c) {
 			throw c;
 		} catch (Exception e) {
@@ -75,11 +77,13 @@ public class CursoService implements ICursoService {
 	public CursoEntity consultarPorCodigo(String codCurso) {
 
 		try {
+			
 			CursoEntity curso = this.cursoRepository.findCursoByCodigo(codCurso);
 
 			if (curso == null) {
 				throw new CursoException(ErrorMessagesConstants.ERRO_CURSO_NAO_ENCONTRADO.getValor(), HttpStatus.NOT_FOUND);
 			}
+			
 			return curso;
 
 		} catch (CursoException c) {
@@ -92,17 +96,24 @@ public class CursoService implements ICursoService {
 	@CachePut(unless = "#result.size()<3")
 	@Override
 	public List<CursoEntity> listar() {
+		
 		return this.cursoRepository.findAll();
 	}
 	
 	@Override
 	public Boolean excluir(Long cursoId) {
+
 		try {
 			if(this.cursoRepository.findById(cursoId).isPresent()) {
+
 				this.cursoRepository.deleteById(cursoId);
+
 				return Boolean.TRUE;
+
 			}
+
 			throw new CursoException(ErrorMessagesConstants.ERRO_CURSO_NAO_ENCONTRADO.getValor(), HttpStatus.NOT_FOUND);
+
 		}catch (CursoException c) {
 			throw c;
 		}catch (Exception e) {
@@ -114,8 +125,8 @@ public class CursoService implements ICursoService {
 	 * O cadastrar e atualizar tem comportamentos semelhantes então centralizamos
 	 * esss comportamento.
 	 */
-
 	private Boolean cadastrarOuAtualizar(CursoModel cursoModel) {
+
 		List<MateriaEntity> listMateriaEntity = new ArrayList<>();
 
 		if (!cursoModel.getMaterias().isEmpty()) {
@@ -127,10 +138,11 @@ public class CursoService implements ICursoService {
 		}
 
 		CursoEntity cursoEntity = new CursoEntity();
-		
+
 		if(cursoModel.getId()!=null) {
 			cursoEntity.setId(cursoModel.getId());
-		}
+		}		
+
 		cursoEntity.setCodigo(cursoModel.getCodCurso());
 		cursoEntity.setNome(cursoModel.getNome());
 		cursoEntity.setMaterias(listMateriaEntity);
@@ -139,4 +151,5 @@ public class CursoService implements ICursoService {
 
 		return Boolean.TRUE;
 	}
+
 }

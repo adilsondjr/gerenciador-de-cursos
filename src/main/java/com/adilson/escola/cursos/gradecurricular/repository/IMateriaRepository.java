@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IMateriaRepository extends JpaRepository<MateriaEntity, Long> {
-	
+
 	@Query("select m from MateriaEntity m where m.cargaHoraria >= :horaMinima")
 	public List<MateriaEntity> findByHoraMinima(@Param("horaMinima") int horaMinima);
 
