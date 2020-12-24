@@ -1,10 +1,8 @@
 package com.adilson.escola.cursos.gradecurricular.handler;
 
 import com.adilson.escola.cursos.gradecurricular.exception.MateriaException;
-import com.adilson.escola.cursos.gradecurricular.model.ErrorMapResponse;
-import com.adilson.escola.cursos.gradecurricular.model.ErrorMapResponse.ErrorMapResponseBuilder;
-import com.adilson.escola.cursos.gradecurricular.model.ErrorResponse;
-import com.adilson.escola.cursos.gradecurricular.model.ErrorResponse.ErrorResponseBuilder;
+import com.adilson.escola.cursos.gradecurricular.model.Response;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -19,7 +17,7 @@ import java.util.Map;
 public class ResourceHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorMapResponse> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+	public ResponseEntity<Response<Map<String, String>>> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 		Map<String, String> errors = new HashMap<>();
 
 		ex.getBindingResult().getAllErrors().forEach(error -> {
@@ -28,21 +26,21 @@ public class ResourceHandler {
 			errors.put(field, message);
 		});
 
-		ErrorMapResponseBuilder errorMap = ErrorMapResponse.builder();
-		errorMap.errors(errors).httpStatus(HttpStatus.BAD_REQUEST.value()).timeStamp(System.currentTimeMillis());
+		Response<Map<String, String>> response = new Response<>();
 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap.build());
+		response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+		response.setData(errors);
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
 	@ExceptionHandler(MateriaException.class)
-	public ResponseEntity<ErrorResponse> handlerMateriaException(MateriaException ex) {
-		ErrorResponseBuilder erro = ErrorResponse.builder();
+	public ResponseEntity<Response<String>> handlerMateriaException(MateriaException ex) {
+		Response<String> response = new Response<>();
 
-		erro.httpStatus(ex.getHttpStatus().value());
-		erro.message(ex.getMessage());
-		erro.timeStamp(System.currentTimeMillis());
+		response.setStatusCode(ex.getHttpStatus().value());
+		response.setData(ex.getMessage());
 
-		return ResponseEntity.status(ex.getHttpStatus()).body(erro.build());
+		return ResponseEntity.status(ex.getHttpStatus()).body(response);
 	}
-
 }
