@@ -1,5 +1,5 @@
 languagem: java
-jdk: "-openjdk8"
+jdk: oraclejdk8
 deploy:
   provider: heroku
   api_key:
